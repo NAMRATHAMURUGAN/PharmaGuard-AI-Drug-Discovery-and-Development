@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Large model files
+models/*.pkl
+
+# Large numpy files
+datasets/*.npy
+
+# Data exports and generated artifacts
+datasets/*.csv
+datasets/*.pkl
+datasets/checkpoints/
+results/
+shap_plots/
+
+# Secrets and credential files
+.env
+*.key
+*.pem
+*.crt
+*.p12
+credentials
+api_keys
+
+# Environment
+venv/
+.venv/
+
+# VS Code
+.vscode/

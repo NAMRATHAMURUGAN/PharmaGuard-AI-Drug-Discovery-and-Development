@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaGuard AI</title>
+
+```
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
+```
+
+</head>
+
+<body>
+
+```
+<!-- ========================================= -->
+<!-- SIDEBAR -->
+<!-- ========================================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        🧬 PharmaGuard AI
+    </div>
+
+    <div class="logo-subtitle">
+        Explainable Drug Safety Platform
+    </div>
+
+    <ul class="menu">
+
+        <li
+            class="active"
+            onclick="showSection('overview', this)"
+        >
+            🏠 Overview
+        </li>
+
+        <li
+            onclick="showSection('toxicity', this)"
+        >
+            ☣ Toxicity Analysis
+        </li>
+
+        <li
+            onclick="showSection('ddi', this)"
+        >
+            💊 DDI Analysis
+        </li>
+
+        <li
+            onclick="showSection('dualview', this)"
+        >
+            🧬 Molecular AI
+        </li>
+
+        <li
+            onclick="showSection('fusion', this)"
+        >
+            ⚡ Fusion Engine
+        </li>
+
+        <li
+            onclick="showSection('shap', this)"
+        >
+            🔬 SHAP Explainability
+        </li>
+
+        <li
+            onclick="showSection('recommendations', this)"
+        >
+            📋 Recommendations
+        </li>
+
+    </ul>
+
+</div>
+
+<!-- ========================================= -->
+<!-- MAIN CONTENT -->
+<!-- ========================================= -->
+
+<div class="main-content">
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+        <h1 id="pageTitle">
+            PharmaGuard AI Dashboard
+        </h1>
+
+        <div class="status-badge">
+            ● System Online
+        </div>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- OVERVIEW -->
+    <!-- ========================================= -->
+
+    <div
+        id="overview"
+        class="section"
+    >
+
+        <!-- ANALYSIS FORM -->
+
+        <div class="big-card">
+
+            <h2>
+                Drug Safety Analysis
+            </h2>
+
+            <br>
+
+            <div class="input-grid">
+
+                <div>
+
+                    <label>
+                        Drug Name
+                    </label>
+
+                    <input
+                        id="drug_name"
+                        type="text"
+                        placeholder="Search Drug..."
+                        autocomplete="off"
+                        onkeyup="searchDrug('drug_name','drug_suggestions')"
+                    >
+
+                    <div
+                        id="drug_suggestions"
+                        class="suggestions"
+                    ></div>
+
+                </div>
+
+                <div>
+
+                    <label>
+                        Co Drug
+                    </label>
+
+                    <input
+                        id="co_drug"
+                        type="text"
+                        placeholder="Search Co Drug..."
+                        autocomplete="off"
+                        onkeyup="searchDrug('co_drug','co_drug_suggestions')"
+                    >
+
+                    <div
+                        id="co_drug_suggestions"
+                        class="suggestions"
+                    ></div>
+
+                </div>
+
+                <div class="full-width">
+
+                    <label>
+                        SMILES String
+                    </label>
+
+                    <input
+                        id="smiles"
+                        type="text"
+                        placeholder="Auto-filled from database"
+                        readonly
+                    >
+
+                </div>
+
+            </div>
+
+            <hr style="margin:20px 0;border-color:#334155;">
+
+            <h3>
+                Patient Profile
+            </h3>
+
+            <br>
+
+            <div class="input-grid">
+
+                <input
+                    id="age"
+                    type="number"
+                    placeholder="Age"
+                    value="45"
+                >
+
+                <input
+                    id="weight"
+                    type="number"
+                    placeholder="Weight (kg)"
+                    value="70"
+                >
+
+                <select id="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+
+                <input
+                    id="conditions"
+                    type="text"
+                    placeholder="Diabetes, Hypertension"
+                >
+
+            </div>
+
+            <button
+                class="analyze-btn"
+                onclick="toggleClinical()"
+                type="button"
+            >
+                Advanced Clinical Parameters
+            </button>
+
+            <div
+                id="clinicalSection"
+                style="display:none;margin-top:20px;"
+            >
+
+                <div class="input-grid">
+
+                    <input
+                        id="egfr"
+                        type="number"
+                        value="80"
+                        placeholder="eGFR"
+                    >
+
+                    <input
+                        id="alt"
+                        type="number"
+                        value="30"
+                        placeholder="ALT"
+                    >
+
+                    <input
+                        id="ast"
+                        type="number"
+                        value="25"
+                        placeholder="AST"
+                    >
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <button
+                class="analyze-btn"
+                onclick="runAnalysis()"
+            >
+                🚀 Analyze Drug
+            </button>
+
+        </div>
+
+        <!-- OVERVIEW STATS -->
+
+        <div class="card-grid">
+
+            <div class="stat-card">
+                <div class="stat-title">
+                    Toxicity Models
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="tox_models"
+                >
+                    12
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">
+                    DDI Records
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="ddi_records"
+                >
+                    130422
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">
+                    Mapped Drugs
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="mapped_drugs"
+                >
+                    1599
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">
+                    AI Models
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="models"
+                >
+                    2
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TOXICITY -->
+
+    <div
+        id="toxicity"
+        class="section hidden"
+    >
+
+        <h2>
+            Toxicity Analysis
+        </h2>
+
+        <div
+            class="big-card"
+            id="toxicity_result"
+        >
+
+            Run analysis to view toxicity results
+
+        </div>
+
+        <div
+            class="big-card"
+            id="toxicity_metrics"
+        >
+            Toxicity model evaluation metrics will appear here after analysis.
+        </div>
+
+    </div>
+
+    <!-- DDI -->
+
+    <div
+        id="ddi"
+        class="section hidden"
+    >
+
+        <h2>
+            Drug Interaction Analysis
+        </h2>
+
+        <div
+            class="big-card"
+            id="ddi_result"
+        >
+
+            Run analysis to view DDI results
+
+        </div>
+
+        <div
+            class="big-card"
+            id="ddi_metrics"
+        >
+            DDI model evaluation metrics will appear here after analysis.
+        </div>
+
+    </div>
+
+
+
+
+        <!-- DUAL VIEW -->
+
+        <div
+            id="dualview"
+            class="section hidden"
+        >
+
+            <h2>
+                Molecular AI
+            </h2>
+
+            <div class="dual-grid">
+
+                <div class="big-card">
+
+                    <h3>
+                        Molecular Structure
+                    </h3>
+
+                    <div id="mol_structure">
+
+                        Structure will appear here
+
+                    </div>
+
+                </div>
+
+                <div class="big-card">
+
+                    <h3>
+                        Descriptor View
+                    </h3>
+
+                    <div id="descriptor_view">
+
+                        Descriptors will appear here
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FUSION -->
+
+        <div
+            id="fusion"
+            class="section hidden"
+        >
+
+            <h2>
+                Fusion Engine
+            </h2>
+
+            <div
+                class="big-card"
+                id="fusion_result"
+            >
+
+                Run analysis to view readiness score
+
+            </div>
+
+        </div>
+
+        <!-- SHAP -->
+
+        <div
+            id="shap"
+            class="section hidden"
+        >
+
+            <h2>
+                SHAP Explainability
+            </h2>
+
+            <div
+                class="big-card"
+                id="shap_result"
+            >
+
+                SHAP explanations will appear here
+
+            </div>
+
+        </div>
+
+        <!-- RECOMMENDATIONS -->
+
+        <div
+            id="recommendations"
+            class="section hidden"
+        >
+
+            <h2>
+                Recommendations
+            </h2>
+
+            <div
+                class="big-card"
+                id="recommendation_result"
+            >
+
+                Recommendations will appear here
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+
+        <div class="spinner"></div>
+
+        <div class="loading-text" id="loadingStatus">
+            Running PharmaGuard Analysis...
+        </div>
+
+    </div>
+
+    <script
+        src="{{ url_for('static', filename='js/dashboard.js') }}"
+    ></script>
+
+</body>
+
+</html>
+```
