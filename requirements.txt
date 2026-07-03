@@ -1,0 +1,11 @@
+pandas
+numpy
+scikit-learn
+xgboost
+joblib
+flask
+shap
+matplotlib
+requests
+pubchempy
+rdkit
