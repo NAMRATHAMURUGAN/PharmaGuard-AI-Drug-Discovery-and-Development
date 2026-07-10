@@ -20,20 +20,20 @@ PharmaGuard AI takes a drug (by name or SMILES string) and runs it through a lay
 
 **Explainability:** `module3_shap_explainability.py` uses SHAP to show which molecular features drove each prediction, so results aren't a black box.
 
-**Drug-Drug Interaction (DDI):** Dedicated modules (`test_ddi_model.py`, `test_ddi_distribution.py`) check for interaction risk between drug pairs using DrugBank data.
+Drug-Drug Interaction (DDI): Hybrid DDI module combining clinically validated interaction lookup from the DDInter dataset, supported by DrugBank-derived drug metadata and machine learning-based interaction prediction for unseen drug pairs.(`test_ddi_model.py`, `test_ddi_distribution.py`)
 
 **Drug lookup & search:** `check_drugbank.py`, `check_tox21.py`, `fetch_smiles.py`, and `DRUG_SYNONYMS_MAPPING.md` handle resolving drug names/synonyms to standardized identifiers and pulling reference data.
 
 ## Tech Stack
 
 - **ML/Data:** Python, RDKit, Scikit-learn, XGBoost, SHAP
-- **Backend/API:** FastAPI
+- **Backend/API:** Flask
 - **Frontend:** HTML, CSS, JavaScript (dashboard in `PharmaGuardAI/`)
 - **Datasets:** Tox21 (toxicity), DrugBank (drug interactions & metadata)
 
 ## Project Structure
 
-```
+
 PharmaGuard-AI-Drug-Discovery-and-Development/
 ├── PharmaGuardAI/                    # Frontend dashboard (HTML/CSS/JS)
 ├── layer1_2_preprocessing.py
@@ -51,11 +51,11 @@ PharmaGuard-AI-Drug-Discovery-and-Development/
 ├── DRUG_SYNONYMS_MAPPING.md
 ├── test_*.py                          # API, DDI, and dashboard test scripts
 └── requirements.txt
-```
+
 
 ## Setup & Usage
 
-```bash
+
 # Clone the repo
 git clone https://github.com/NAMRATHAMURUGAN/PharmaGuard-AI-Drug-Discovery-and-Development.git
 cd PharmaGuard-AI-Drug-Discovery-and-Development
@@ -68,16 +68,18 @@ python layer1_2_preprocessing.py
 
 # Launch the dashboard
 python layer8_dashboard.py
-```
 
-> Update this section with your actual entry point/run order if it differs.
 
 ## Future Scope
 
-- Expand DDI coverage to a larger drug-pair dataset
-- Add batch prediction support for high-throughput screening
-- Deploy the dashboard for public/demo access
+- **Continuous Drug Knowledge Updates:** Periodically synchronize the local knowledge base with updated releases of DDInter, DrugBank, PubChem, OpenFDA, and DailyMed to incorporate newly approved drugs, emerging drug-drug interactions, adverse drug reactions, and revised clinical safety information.
 
-## Author
+- **Regression-Based Risk Prediction:** Develop regression models to predict continuous toxicity and interaction severity scores, providing finer-grained risk estimation than discrete classification.
 
-**Namratha Murugan** — [GitHub](https://github.com/NAMRATHAMURUGAN) · [LinkedIn](https://www.linkedin.com/in/namratha-murugan-7033ba295)
+- **Graph Neural Networks (GNN/GCN):** Extend the current descriptor-based pipeline with graph-based deep learning models that learn directly from molecular structures, improving generalization for unseen compounds.
+
+- **Comparative Model Benchmarking:** Evaluate Random Forest, Balanced Random Forest, XGBoost, regression models, and GNN/GCN architectures using Accuracy, Precision, Recall, F1-Score, ROC-AUC, RMSE, and MAE.
+
+- **Automated Clinical Report Generation:** Generate downloadable PDF reports containing toxicity analysis, DDI assessment, SHAP explanations, dosage recommendations, and overall readiness scores.
+
+- **High-Throughput Drug Screening:** Enable batch analysis of thousands of candidate molecules to support early-stage drug discovery and lead optimization workflows.
